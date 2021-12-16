@@ -1,0 +1,125 @@
+version: "3.7"
+
+networks:
+  default:
+    external:
+      name: traefik_network
+
+services:
+  auth:
+    container_name: backend-auth-prod
+    build:
+      context: .
+      dockerfile: ./microservices/auth/Dockerfile.prod
+    volumes:
+      - /var/www/log:/usr/src/app/log
+    ports:
+      - 3000:3000
+    working_dir: /usr/src/app
+    restart: unless-stopped
+    labels:
+      - "traefik.backend=auth"
+      - "traefik.frontend.rule=Host:playground-backend-auth.com"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.frontend.entryPoints=https"
+
+  user:
+    container_name: backend-user-prod
+    build:
+      context: .
+      dockerfile: ./microservices/user/Dockerfile.prod
+    volumes:
+      - /var/www/log:/usr/src/app/log
+    ports:
+      - 3001:3001
+    working_dir: /usr/src/app
+    restart: unless-stopped
+    labels:
+      - "traefik.backend=user"
+      - "traefik.frontend.rule=Host:playground-backend-user.com"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.frontend.entryPoints=https"
+
+  stats:
+    container_name: backend-stats-prod
+    build:
+      context: .
+      dockerfile: ./microservices/stats/Dockerfile.prod
+    volumes:
+      - /var/www/log:/usr/src/app/log
+    ports:
+      - 3002:3002
+    working_dir: /usr/src/app
+    restart: unless-stopped
+    labels:
+      - "traefik.backend=stats"
+      - "traefik.frontend.rule=Host:playground-backend-stats.com"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.frontend.entryPoints=https"
+
+  activation:
+    container_name: backend-activation-prod
+    build:
+      context: .
+      dockerfile: ./microservices/activation/Dockerfile.prod
+    volumes:
+      - /var/www/log:/usr/src/app/log
+    ports:
+      - 3003:3003
+    working_dir: /usr/src/app
+    restart: unless-stopped
+    labels:
+      - "traefik.backend=activation"
+      - "traefik.frontend.rule=Host:playground-backend-activation.com"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.frontend.entryPoints=https"
+
+  firebase:
+    container_name: backend-firebase-prod
+    build:
+      context: .
+      dockerfile: ./microservices/firebase/Dockerfile.prod
+    volumes:
+      - /var/www/log:/usr/src/app/log
+    ports:
+      - 3006:3006
+    working_dir: /usr/src/app
+    restart: unless-stopped
+    labels:
+      - "traefik.backend=firebase"
+      - "traefik.frontend.rule=Host:playground-backend-firebase.com"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.frontend.entryPoints=https"
+
+  api:
+    container_name: backend-api-prod
+    build:
+      context: .
+      dockerfile: ./microservices/api/Dockerfile.prod
+    volumes:
+      - /var/www/log:/usr/src/app/log
+    ports:
+      - 3007:3007
+    working_dir: /usr/src/app
+    restart: unless-stopped
+    labels:
+      - "traefik.backend=api"
+      - "traefik.frontend.rule=Host:playground-backend-api.com"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.frontend.entryPoints=https"
+
+  db:
+    image: postgres:12
+    restart: always
+    ports:
+      - 5434:5432
+    environment:
+      - POSTGRES_PASSWORD=8CLNNqLLtFf9UPgJ
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - /var/www/db:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.0
+    ports:
+      - 6379:6379

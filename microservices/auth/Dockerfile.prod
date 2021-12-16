@@ -1,0 +1,15 @@
+FROM golang:buster AS build-stage
+WORKDIR /usr/src/app
+COPY ./microservices/auth .
+RUN go get
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
+# COPY ./cert_gen.sh .
+# RUN ./cert_gen.sh
+
+FROM alpine:latest AS production-stage
+WORKDIR /usr/src/app
+COPY --from=build-stage /usr/src/app/auth .
+# COPY --from=build-stage /usr/src/app/certs/server.crt /usr/src/app/certs/server.key ./cert/
+COPY ./microservices/auth/.env .
+EXPOSE 3000
+CMD ["./auth"]

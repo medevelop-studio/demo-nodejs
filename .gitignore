@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+.DS_Store
+
+# IDE
+.idea
+.awcache
+
+# misc
+npm-debug.logsd
+
+# example
+quick-start
+
+# tests
+coverage
+.nyc_output
+
+# dist
+dist
+
+microservices/*/proto
+microservices/*/.env
+microservices/*/combined.log
+microservices/*/error.log
+
+# logs
+*.log

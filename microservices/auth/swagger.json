@@ -1,0 +1,119 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "this is to show how to write RESTful APIs in golang.\nthat is to provide a detailed overview of the language specs",
+    "title": "Account API.",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "paths": {
+    "/checkAuth/": {
+      "post": {
+        "description": "If token is valid, it's data will be returned else Error Not Authorized (401) will be returned.",
+        "tags": [
+          "checkAuth"
+        ],
+        "summary": "Returns result of checking given JwtToken.",
+        "operationId": "CheckAuth",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JWT Token",
+            "name": "token",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/successCheckAuth"
+          },
+          "404": {
+            "$ref": "#/responses/errorResponse"
+          }
+        }
+      }
+    },
+    "/login/": {
+      "post": {
+        "description": "If the user is found, user will be returned else Error Not Found (404) will be returned.",
+        "tags": [
+          "login"
+        ],
+        "summary": "Return an JwtToken provided by the login and password.",
+        "operationId": "Login",
+        "parameters": [
+          {
+            "description": "login and password of the user",
+            "name": "loginRequest",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": [
+                "login",
+                "password"
+              ],
+              "properties": {
+                "login": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/successLogin"
+          },
+          "404": {
+            "$ref": "#/responses/errorResponse"
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "errorResponse": {
+      "description": "Error response",
+      "schema": {
+        "type": "object"
+      }
+    },
+    "successCheckAuth": {
+      "description": "Success CheckAuth",
+      "schema": {
+        "type": "object"
+      }
+    },
+    "successLogin": {
+      "description": "Success login",
+      "schema": {
+        "type": "object"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "KEY",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ]
+}

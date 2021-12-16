@@ -1,0 +1,18 @@
+{
+    "git.ignoreLimitWarning": true,
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "cSpell.words": [
+        "Scedual",
+        "Tvbet",
+        "jsonb",
+        "nestjs",
+        "nuxapi",
+        "originalname",
+        "playerinfo",
+        "postgres",
+        "promisify",
+        "smallint",
+        "timestamptz",
+        "typeorm"
+    ]
+}

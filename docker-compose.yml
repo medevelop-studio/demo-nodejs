@@ -1,0 +1,72 @@
+version: "3.7"
+
+services:
+  auth:
+    container_name: backend-auth
+    build:
+      context: ./microservices/auth
+      dockerfile: Dockerfile
+    volumes:
+      - ./microservices/auth:/usr/src/app
+    command: fresh
+    ports:
+      - 3000:3000
+    working_dir: /usr/src/app
+    restart: unless-stopped
+
+  user:
+    container_name: backend-user
+    build:
+      context: ./microservices/user
+      dockerfile: Dockerfile
+    volumes:
+      - ./microservices/user/src:/usr/src/app/src
+    command: nest start --watch
+    ports:
+      - 3001:3001
+    working_dir: /usr/src/app
+    restart: unless-stopped
+
+  stats:
+    container_name: backend-stats
+    build:
+      context: ./microservices/stats
+      dockerfile: Dockerfile
+    volumes:
+      - ./microservices/stats/src:/usr/src/app/src
+    command: nest start --watch
+    ports:
+      - 3002:3002
+    working_dir: /usr/src/app
+    restart: unless-stopped
+
+  firebase:
+    container_name: backend-firebase
+    build:
+      context: ./microservices/firebase
+      dockerfile: Dockerfile
+    volumes:
+        - ./microservices/firebase/src:/usr/src/app/src
+    command: nest start --watch
+    ports:
+      - 3006:3006
+    working_dir: /usr/src/app
+    restart: unless-stopped
+
+  api:
+    container_name: backend-api
+    build:
+      context: ./microservices/api
+      dockerfile: Dockerfile
+    volumes:
+        - ./microservices/api/src:/usr/src/app/src
+    command: nest start --watch
+    ports:
+      - 3007:3007
+    working_dir: /usr/src/app
+    restart: unless-stopped
+
+  redis:
+    image: redis:6.0
+    ports:
+      - 6379:6379
